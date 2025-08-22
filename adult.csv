@@ -1,0 +1,104 @@
+Department Table
+create table department(
+  	DeptNo char(5) primary key,
+DeptName varchar2(35), 
+    	Location varchar2(15)
+);
+
+Employee Table
+create table employee(
+   	EmpNo char(10) primary key check(EmpNo like 'E%'),
+   	EmpName varchar2(30),
+    	DeptNo char(5) references department(DeptNo),
+    	Mobile char(12),
+   	Hire_Date date,
+    	Job varchar2(15),
+    	EdLevel smallint,
+   	Gender char(1) check(Gender in ('M','F')),
+   	DOB date,
+    	Salary number(10,2) check(Salary > 0),
+    	Bonus number(10,2),
+    	Comm number(10,2)
+);
+
+Project Table
+create table project(
+    ProjNo char(10) primary key,
+    ProjName varchar2(30),
+    DeptNo char(5) references department(DeptNo),
+    ResEmp char(10) references employee(EmpNo),
+    StDate date,
+    EndDate date
+);
+
+Emp_Proj Table
+create table emp_proj(
+    ProjNo char(10) references project(ProjNo),
+    EmpNo char(10) references employee(EmpNo),
+    EmpTime char(10),
+    constraint pkEmpProj primary key (ProjNo, EmpNo)
+);
+
+2.	alter table employee add Address varchar2(50);
+
+3.	alter table employee drop column Address;
+
+4.	alter table employee modify Mobile char(10);
+
+5.	alter table project rename column ResEmp to RespEmp;
+
+6.	drop table emp_proj;
+create table emp_proj(
+    ProjNo char(10) references project(ProjNo),
+    EmpNo char(10) references employee(EmpNo),
+    EmpTime char(10),
+    constraint pkEmpProj primary key (ProjNo, EmpNo)
+);
+
+7.	Department Table With Integrity Constraints
+create table department(
+  	DeptNo char(5) constraint pkDeptNo primary key,
+	DeptName varchar2(35), 
+   	Location varchar2(15)
+);
+
+Employee Table With Integrity Constraints
+create table employee(
+EmpNo char(10) constraint pkEmpNo primary key constraint chkEmpNo check(EmpNo  like    'E%'),
+   EmpName varchar2(30),
+   DeptNo char(5) constraint fkDeptNo references department(DeptNo),
+   Mobile char(12),
+   Hire_Date date,
+   Job varchar2(15),
+   EdLevel smallint,
+   Gender char(1) constraint chkGender check(Gender in ('M','F')),
+   DOB date,
+   Salary number(10,2) constraint chkSalary check(Salary > 0),
+   Bonus number(10,2),
+   Comm number(10,2)
+);
+
+
+
+
+
+Project Table With Integrity Constraints
+create table project(
+    ProjNo char(10) constraint pkProjNo primary key,
+    ProjName varchar2(30),
+    DeptNo char(5) constraint fkDeptNo2 references department(DeptNo),
+    ResEmp char(10) constraint fkResEmp references employee(EmpNo),
+    StDate date,
+    EndDate date
+);
+
+Emp_Proj Table With Integrity Constraints
+create table emp_proj(
+    ProjNo char(10) constraint fkProjNo2 references project(ProjNo),
+    EmpNo char(10) constraint fkEmpNo2 references employee(EmpNo),
+    EmpTime char(10),
+    constraint pkEmpProj primary key (ProjNo, EmpNo)
+);
+
+8.	a) alter table employee add constraint hireDate check (Hire_Date > DOB);
+b) alter table project add constraint proDateCheck check (StDate < EndDate);
